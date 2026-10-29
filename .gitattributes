@@ -1,0 +1,8 @@
+# Enforce normalized cross-platform line endings and shell execution permissions
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.sh text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.json text eol=lf

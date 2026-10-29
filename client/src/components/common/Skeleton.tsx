@@ -1,0 +1,14 @@
+import React from 'react';
+
+interface SkeletonProps {
+  className?: string;
+}
+
+export const Skeleton: React.FC<SkeletonProps> = ({ className = 'h-4 w-full' }) => {
+  return (
+    <div
+      className={`animate-pulse bg-stone-200/70 rounded-xl ${className}`}
+      aria-hidden="true"
+    />
+  );
+};

@@ -1,0 +1,57 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Full-Stack (Client + Server)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "presentation": {
+        "group": "PostureFit",
+        "order": 1
+      }
+    },
+    {
+      "name": "Run Server Only (Port 5000)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "presentation": {
+        "group": "PostureFit",
+        "order": 2
+      }
+    },
+    {
+      "name": "Run Client Only (Port 5173)",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/client",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "presentation": {
+        "group": "PostureFit",
+        "order": 3
+      }
+    },
+    {
+      "name": "Run Production Server (dist)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/server/dist/index.js",
+      "console": "integratedTerminal",
+      "presentation": {
+        "group": "PostureFit",
+        "order": 4
+      }
+    }
+  ]
+}

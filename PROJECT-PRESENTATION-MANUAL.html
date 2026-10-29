@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PostureFit — Final-Year Project Presentation & Architectural Manual</title>
+  <style>
+    :root {
+      --brand-primary: #0f766e;
+      --brand-teal: #0d9488;
+      --brand-light: #f0fdfa;
+      --brand-dark: #042f2e;
+      --accent-amber: #f59e0b;
+      --accent-blue: #0284c7;
+      --bg-surface: #fafaf9;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --border-color: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-surface);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 24px;
+    }
+    .container { max-width: 1000px; margin: 0 auto; }
+    header {
+      background: linear-gradient(135deg, var(--brand-dark), var(--brand-primary));
+      color: white;
+      padding: 36px 32px;
+      border-radius: 20px;
+      margin-bottom: 28px;
+      box-shadow: 0 10px 25px -5px rgba(15, 118, 110, 0.25);
+    }
+    header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 8px; }
+    header p { color: #ccfbf1; font-size: 1.05rem; }
+    .badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+    }
+    .card {
+      background: white;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+    .card h2 {
+      font-size: 1.4rem;
+      color: var(--brand-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid var(--brand-light);
+      padding-bottom: 8px;
+    }
+    .card h3 { font-size: 1.1rem; color: var(--text-main); margin: 16px 0 8px 0; }
+    p, li { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 10px; }
+    ul, ol { padding-left: 24px; margin-bottom: 16px; }
+    code {
+      background: #f1f5f9;
+      color: #0f766e;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      font-size: 0.9em;
+    }
+    pre {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 12px;
+      overflow-x: auto;
+      font-family: Consolas, monospace;
+      font-size: 0.88rem;
+      margin: 12px 0 16px 0;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 16px 0;
+    }
+    @media (max-width: 768px) { .grid-2 { grid-template-columns: 1fr; } }
+    .box {
+      background: var(--brand-light);
+      border: 1px solid #99f6e4;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .box h4 { color: var(--brand-primary); font-size: 0.95rem; font-weight: 700; margin-bottom: 6px; }
+    .alert {
+      background: #fef3c7;
+      border-left: 4px solid var(--accent-amber);
+      padding: 14px 18px;
+      border-radius: 8px;
+      color: #78350f;
+      font-size: 0.9rem;
+      margin: 16px 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.9rem;
+    }
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      text-align: left;
+    }
+    th { background: #f8fafc; color: var(--text-main); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="badge">Final-Year Project Manual</span>
+      <h1>PostureFit 🌿</h1>
+      <p>A Gamified Web-Based Workplace Posture Awareness and Activity Platform</p>
+    </header>
+
+    <!-- SECTION 1: HOW TO RUN ON ANY COMPUTER -->
+    <div class="card">
+      <h2>🚀 1. How to Run on Any Laptop or from a USB Pen Drive</h2>
+      <p>If you copy this whole project directory to a USB pen drive or another laptop, here is the exact way to run it:</p>
+      
+      <div class="grid-2">
+        <div class="box">
+          <h4>Method A: 1-Click Double Click</h4>
+          <p>Simply double-click the file named <code>START-POSTUREFIT.bat</code>.</p>
+          <p>It checks for Node.js, installs any missing packages, starts both servers, and opens your browser automatically at <code>http://localhost:5173</code>!</p>
+        </div>
+        <div class="box">
+          <h4>Method B: Inside VS Code Terminal</h4>
+          <p>1. Open folder in VS Code (<strong>File > Open Folder</strong>).</p>
+          <p>2. Open terminal (<code>Ctrl + ~</code>) and type:</p>
+          <code>npm run dev</code>
+          <p>3. Open <code>http://localhost:5173</code> in Chrome or Edge.</p>
+        </div>
+      </div>
+
+      <div class="alert">
+        <strong>Demo Account Available:</strong> On the login screen, click the button <strong>"Quick Demo Login"</strong> to instantly sign in without filling out forms.
+      </div>
+    </div>
+
+    <!-- SECTION 2: TECHNICAL ARCHITECTURE EXPLANATION -->
+    <div class="card">
+      <h2>🧠 2. Complete Technical Stack Breakdown</h2>
+      <p>If your professor or classmates ask: <em>"What are the components inside and how do they connect?"</em>, use these definitions:</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Layer</th>
+            <th>Technology Used</th>
+            <th>What It Does in PostureFit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Frontend</strong></td>
+            <td>React 18 + Vite + Tailwind CSS + Three.js</td>
+            <td>The user interface you see in the browser. Handles the 3D anatomical mannequin, countdown timers, voice coach buttons, and responsive pages.</td>
+          </tr>
+          <tr>
+            <td><strong>Backend</strong></td>
+            <td>Node.js + Express + TypeScript</td>
+            <td>The server listening on port 5000. Validates requests with Zod schemas, enforces rate limits, calculates streaks, and protects admin actions.</td>
+          </tr>
+          <tr>
+            <td><strong>Full-Stack Connection</strong></td>
+            <td>REST APIs over HTTP (Vite Proxy)</td>
+            <td>The frontend sends fetch requests to <code>/api/...</code>. In development, Vite proxies requests from port 5173 to port 5000. In production, Express directly serves the compiled frontend.</td>
+          </tr>
+          <tr>
+            <td><strong>Database Layer</strong></td>
+            <td>PostgreSQL + Supabase (RLS) + Local Fallback</td>
+            <td>Stores user profiles, preferences, work sessions, and the immutable points ledger. Row Level Security ensures users only see their own private data.</td>
+          </tr>
+          <tr>
+            <td><strong>Interactive 3D Engine</strong></td>
+            <td>Three.js (WebGL)</td>
+            <td>Renders the 3D anatomical model with studio lighting. Users can drag their mouse to rotate the model 360° and watch real-time skeletal motion for each stretch!</td>
+          </tr>
+          <tr>
+            <td><strong>Voice Assistant</strong></td>
+            <td>Browser Web Speech API</td>
+            <td>Speaks instructions step-by-step, announces transitions, and answers &quot;What are we doing?&quot; runs 100% offline with zero cost.</td>
+          </tr>
+          <tr>
+            <td><strong>AI Question Scope</strong></td>
+            <td>Future Scope (Pose Estimation)</td>
+            <td>Per the official Project Synopsis, automated webcam camera AI detection is future scope to protect user privacy and avoid high CPU usage.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 2.5: UPGRADED 3D ENGINE & 5-MINUTE CHALLENGES -->
+    <div class="card">
+      <h2>🧬 2.5. Upgraded 3D Humanoid Engine & Curated 5-Minute Flows</h2>
+      <p>PostureFit incorporates an advanced <strong>Three.js WebGL humanoid mannequin</strong> that removes all ambiguity about how to perform desk exercises:</p>
+
+      <div class="grid-2">
+        <div class="box">
+          <h4>👤 Anatomical Humanoid Model</h4>
+          <p>Sculpted athletic proportions: contoured head with gaze visor, articulated cervical spine, clavicle shoulder girdle, pectoral chest contours, dorsal vertebrae, tapered limbs, and ergonomic sneakers.</p>
+          <p><strong>Studio Lighting:</strong> 3-point lighting (Key, Fill, and Cyan Rim lights) with ground contact shadows.</p>
+        </div>
+        <div class="box">
+          <h4>⚖️ "Proper Form" vs "Common Mistake"</h4>
+          <p>Users can toggle between textbook execution and the common postural fault (e.g., forward-head slouch with kyphotic rounded shoulders).</p>
+          <p><strong>Speed Control:</strong> 0.5x Slow-Motion for studying form, 1.0x Normal, and 1.5x Tempo.</p>
+        </div>
+      </div>
+
+      <h3>📚 25 Industry-Standard Exercises Across 5 Curated Segments</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Segment</th>
+            <th>Difficulty Tier</th>
+            <th>Target Audience</th>
+            <th>Included Exercises (5 Steps Each)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>🌅 Morning Wake-Up</strong></td>
+            <td>Beginner</td>
+            <td>Universal</td>
+            <td>Diaphragmatic Breath, Chin Tucks, Scapular Squeeze, Cat-Cow, Ankle Pumps</td>
+          </tr>
+          <tr>
+            <td><strong>💻 Tech-Neck Decompressor</strong></td>
+            <td>Beginner / Intermediate</td>
+            <td>Students & Coders</td>
+            <td>Cervical Overpressure, Upper Trap Stretch, Levator Scapulae, W-to-Y Pulses, Doorway Pec Opener</td>
+          </tr>
+          <tr>
+            <td><strong>💼 Corporate Desk & Carpal Guard</strong></td>
+            <td>Intermediate</td>
+            <td>Office Professionals</td>
+            <td>Wrist Glides, Tendon Glides, Torso Rotation, Figure-4 Hip Opener, Standing Calf Pumps</td>
+          </tr>
+          <tr>
+            <td><strong>🎓 Student Study Cram & Backpack</strong></td>
+            <td>Beginner / Intermediate</td>
+            <td>Students</td>
+            <td>Backpack Reset, Open-Book Mobility, Hamstring Nerve Floss, Psoas Hip Lunge, Desk Push-Away</td>
+          </tr>
+          <tr>
+            <td><strong>⚡ Advanced Posture Power</strong></td>
+            <td>Hard / Advanced</td>
+            <td>Postural Conditioning</td>
+            <td>Wall Angels, Deep Chair Squats, Thoracic Windmills, Single-Leg Hinge, Prone Cobra Hold</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- SECTION 3: CLASSROOM VIVA QUESTIONS & ANSWERS -->
+    <div class="card">
+      <h2>🎓 3. Classroom Viva Presentation & Examiner Q&A</h2>
+      
+      <h3>Q1: What is the main problem PostureFit solves?</h3>
+      <p><strong>Answer:</strong> Computer desk workers and students stay seated for hours without moving, leading to cervical spine strain (&quot;tech neck&quot;), rounded shoulders, and wrist stiffness. PostureFit solves this through structured micro-breaks, 5-minute guided challenges, and gamified streaks.</p>
+
+      <h3>Q2: How does the timer handle background tabs or laptop sleep?</h3>
+      <p><strong>Answer:</strong> Instead of counting down in memory (which gets paused by the browser), PostureFit stores the target end timestamp: <code>targetEndAt = Date.now() + duration</code> in <code>localStorage</code>. When the user returns or wakes their laptop, the <code>visibilitychange</code> event recalculates remaining time against <code>Date.now()</code>, guaranteeing zero clock drift.</p>
+
+      <h3>Q3: How do you prevent users from cheating and giving themselves infinite points?</h3>
+      <p><strong>Answer:</strong> Zero-trust client architecture. The client never submits points to the server. The client only sends an activity ID with a unique idempotency key. The Express server validates the action, calculates points from centralized rules, and writes to an immutable ledger table.</p>
+
+      <h3>Q4: Why are there different modes for Students vs Office Workers?</h3>
+      <p><strong>Answer:</strong> Students typically study on laptops on low desks or in libraries with backpack tension. Office workers sit in corporate cubicles with continuous mouse/keyboard repetitive strain. PostureFit provides tailored filters for both contexts.</p>
+
+      <h3>Q5: What external services are used, and can this run offline?</h3>
+      <p><strong>Answer:</strong> PostureFit uses Supabase (PostgreSQL + Auth) for cloud persistence, the browser's native Web Speech API for voice coaching, and Three.js (WebGL) for 3D animation. However, it features a <strong>dual-mode storage bridge</strong>: if no internet or cloud credentials exist, it automatically switches to an in-memory persistent store with preloaded demo data, running 100% offline!</p>
+
+      <h3>Q6: Why is automated AI webcam posture detection considered future scope?</h3>
+      <p><strong>Answer:</strong> Per our approved project synopsis, V1 prioritizes habit formation and workplace usability. Running client-side neural network models continuously consumes significant laptop battery/CPU, creates severe privacy concerns in corporate open offices, and risks inaccurate medical claims. We built the core habit engine first and scheduled MediaPipe computer vision for V2.</p>
+    </div>
+
+    <!-- SECTION 4: FILE STRUCTURE -->
+    <div class="card">
+      <h2>📁 4. Clean File Structure Segment</h2>
+      <pre>
+d:\Coding\a/
+├── START-POSTUREFIT.bat      # 1-Click double-click launcher
+├── RUN-TESTS.bat             # 1-Click automated test runner
+├── PROJECT-PRESENTATION.html # This offline presentation manual
+├── .vscode/                  # Preconfigured F5 run profiles & tasks
+├── supabase/migrations/      # PostgreSQL schema, RLS policies & seed data
+├── server/                   # Express TypeScript Backend (Port 5000)
+│   ├── src/routes/           # REST endpoints (/auth, /exercises, /rewards, etc.)
+│   ├── src/services/         # Streak calculation & Gamification rules engine
+│   └── tests/                # 17 Automated backend tests
+└── client/                   # React 18 + Vite Frontend (Port 5173)
+    ├── src/components/       # 3D Animation, Voice Coach, Radial Timer, Cards
+    ├── src/pages/            # 14 Full pages (Dashboard, Library, Challenges, etc.)
+    └── tests/                # 6 Automated frontend tests
+      </pre>
+    </div>
+  </div>
+</body>
+</html>
