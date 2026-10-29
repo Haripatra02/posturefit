@@ -66,7 +66,9 @@ export function createApp(): Express {
   app.use('/api/admin', adminRoutes);
 
   // Serve static client build if present (for unified production deployment)
-  const clientDistPath = path.resolve(__dirname, '../../client/dist');
+  const candidate1 = path.resolve(__dirname, '../../client/dist');
+  const candidate2 = path.resolve(process.cwd(), 'client/dist');
+  const clientDistPath = fs.existsSync(candidate1) ? candidate1 : candidate2;
   if (fs.existsSync(clientDistPath)) {
     app.use(express.static(clientDistPath));
     app.get('*', (req, res, next) => {
