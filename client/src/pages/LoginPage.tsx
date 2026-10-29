@@ -62,13 +62,8 @@ export const LoginPage: React.FC = () => {
     setResetError(null);
     setResetSuccess(null);
 
-    if (!resetEmail || !resetNewPassword) {
-      setResetError('Please enter your email and a new password.');
-      return;
-    }
-
-    if (resetNewPassword.length < 6) {
-      setResetError('New password must be at least 6 characters.');
+    if (!resetEmail) {
+      setResetError('Please enter your account email address.');
       return;
     }
 
@@ -76,13 +71,10 @@ export const LoginPage: React.FC = () => {
     try {
       const res = await authApi.resetPassword({
         email: resetEmail,
-        new_password: resetNewPassword,
       });
-      setResetSuccess(res.message || 'Password updated successfully!');
-      setEmail(resetEmail);
-      setPassword(resetNewPassword);
+      setResetSuccess(res.message || 'If an account exists with this email address, password reset instructions have been sent.');
     } catch (err: any) {
-      setResetError(err.message || 'Failed to reset password. Please verify the email.');
+      setResetError(err.message || 'Failed to process request. Please try again.');
     } finally {
       setIsResetting(false);
     }
@@ -194,12 +186,12 @@ export const LoginPage: React.FC = () => {
       <Modal
         isOpen={resetModalOpen}
         onClose={() => setResetModalOpen(false)}
-        title="Reset Account Password"
+        title="Reset Your Password"
         maxWidth="md"
       >
         <form onSubmit={handleResetPassword} className="space-y-4">
           <p className="text-xs text-charcoal-muted leading-relaxed">
-            Enter your registered PostureFit account email and a new password. Your credentials will be updated immediately.
+            Enter your registered PostureFit account email. We will send you secure instructions to reset your password.
           </p>
 
           {resetError && (
@@ -230,21 +222,6 @@ export const LoginPage: React.FC = () => {
             />
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-charcoal-heading uppercase tracking-wider mb-1">
-              New Password (min 6 characters)
-            </label>
-            <input
-              type="password"
-              value={resetNewPassword}
-              onChange={(e) => setResetNewPassword(e.target.value)}
-              placeholder="••••••••"
-              required
-              minLength={6}
-              className="w-full px-3.5 py-2 rounded-xl border border-surface-border text-sm focus:outline-none focus:ring-2 focus:ring-brand-600 bg-white"
-            />
-          </div>
-
           <div className="flex items-center justify-end gap-3 pt-2">
             <Button
               type="button"
@@ -261,7 +238,7 @@ export const LoginPage: React.FC = () => {
               isLoading={isResetting}
               leftIcon={<KeyRound className="w-4 h-4" />}
             >
-              Update Password
+              Send Reset Instructions
             </Button>
           </div>
         </form>

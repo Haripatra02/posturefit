@@ -56,9 +56,9 @@ export const requireAuth = async (
       return;
     }
 
-    // Allow secret admin key via X-Admin-Key header for management/automation
-    const adminKey = req.headers['x-admin-key'];
-    if (adminKey && adminKey === config.adminSecretKey) {
+    // Allow secret admin key via X-Admin-Key header for management/automation (if securely configured)
+    const adminKey = req.headers['x-admin-key'] as string | undefined;
+    if (config.adminSecretKey && config.adminSecretKey.length >= 16 && adminKey === config.adminSecretKey) {
       req.user = {
         id: 'admin-service-account',
         email: 'admin@posturefit.internal',
@@ -111,9 +111,9 @@ export const requireAdmin = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  // Allow secret admin key via X-Admin-Key header for management/automation
-  const adminKey = req.headers['x-admin-key'];
-  if (adminKey && adminKey === config.adminSecretKey) {
+  // Allow secret admin key via X-Admin-Key header for management/automation (if securely configured)
+  const adminKey = req.headers['x-admin-key'] as string | undefined;
+  if (config.adminSecretKey && config.adminSecretKey.length >= 16 && adminKey === config.adminSecretKey) {
     next();
     return;
   }

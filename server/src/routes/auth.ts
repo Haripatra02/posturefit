@@ -23,7 +23,8 @@ const loginSchema = z.object({
 
 const resetPasswordSchema = z.object({
   email: z.string().email('Please provide a valid email address'),
-  new_password: z.string().min(6, 'Password must be at least 6 characters'),
+  new_password: z.string().min(6, 'Password must be at least 6 characters').optional(),
+  token: z.string().optional(),
 });
 
 // POST /api/auth/register
@@ -212,47 +213,82 @@ router.post('/login', validateBody(loginSchema), async (req: AuthenticatedReques
 
 // POST /api/auth/reset-password
 router.post('/reset-password', validateBody(resetPasswordSchema), async (req: AuthenticatedRequest, res: Response): Promise<void> => {
-  const { email, new_password } = req.body;
+  const { email, new_password, token } = req.body;
 
   try {
-    if (isSupabaseConfigured() && config.supabaseServiceRoleKey) {
-      const supabase = getSupabase()!;
-      const { data, error } = await supabase.auth.admin.listUsers();
-      if (error) {
-        res.status(500).json({ success: false, error: 'Failed to access user directory' });
-        return;
-      }
-
-      const user = data.users.find((u) => u.email?.toLowerCase() === email.toLowerCase());
-      if (!user) {
-        res.status(404).json({ success: false, error: 'No account registered with this email address.' });
-        return;
-      }
-
-      const updateRes = await supabase.auth.admin.updateUserById(user.id, {
-        password: new_password,
-        email_confirm: true,
-      });
-
-      if (updateRes.error) {
-        res.status(400).json({ success: false, error: updateRes.error.message });
-        return;
-      }
-
-      res.json({
-        success: true,
-        message: 'Password reset successfully. You can now log in with your new password.',
+    // SECURITY ENFORCEMENT: Unauthenticated password overwrite is strictly disallowed.
+    // If a client attempts to supply a new_password without a valid recovery token or session, reject immediately.
+    if (new_password && !token && !req.headers.authorization) {
+      res.status(403).json({
+        success: false,
+        error: 'Direct password reset requires a verified recovery token or authenticated session. Unauthenticated password modification is disallowed for account security.',
       });
       return;
     }
 
-    // Local / Offline fallback
+    if (isSupabaseConfigured()) {
+      const supabase = getSupabase()!;
+
+      // 1. If a verified recovery token or session is provided with new_password, perform the password update:
+      if (new_password && token) {
+        const { error: sessionError } = await supabase.auth.setSession({
+          access_token: token,
+          refresh_token: token,
+        });
+
+        if (sessionError) {
+          res.status(401).json({
+            success: false,
+            error: 'Invalid or expired password reset token. Please request a new recovery link.',
+          });
+          return;
+        }
+
+        const { error: updateError } = await supabase.auth.updateUser({
+          password: new_password,
+        });
+
+        if (updateError) {
+          res.status(400).json({ success: false, error: updateError.message });
+          return;
+        }
+
+        res.json({
+          success: true,
+          message: 'Your password has been successfully updated. You may now log in.',
+        });
+        return;
+      }
+
+      // 2. Standard Secure "Forgot Password" Request:
+      // Sends a secure, time-limited cryptographic reset link to the user's verified email.
+      // Response is non-enumerating to prevent user enumeration attacks.
+      await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${config.clientUrl}/reset-password`,
+      });
+
+      res.json({
+        success: true,
+        message: 'If an account exists with this email address, password reset instructions have been sent.',
+      });
+      return;
+    }
+
+    // Local / Offline fallback (for tests & development)
+    if (new_password && !token) {
+      res.status(403).json({
+        success: false,
+        error: 'Direct password reset requires a verified recovery token.',
+      });
+      return;
+    }
+
     res.json({
       success: true,
-      message: 'Password reset successfully for local offline mode.',
+      message: 'If an account exists with this email address, password reset instructions have been sent.',
     });
   } catch (err: any) {
-    res.status(500).json({ success: false, error: err.message || 'Password reset failed' });
+    res.status(500).json({ success: false, error: 'Failed to process password reset request' });
   }
 });
 

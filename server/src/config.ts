@@ -8,7 +8,7 @@ export const config = {
   supabaseUrl: process.env.SUPABASE_URL || '',
   supabaseAnonKey: process.env.SUPABASE_ANON_KEY || '',
   supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-  adminSecretKey: process.env.ADMIN_SECRET_KEY || 'posturefit_super_secret_admin_token_2026',
+  adminSecretKey: process.env.ADMIN_SECRET_KEY || '',
 
   // Gamification Point Values (Enforced securely on backend)
   points: {

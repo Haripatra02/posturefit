@@ -40,7 +40,7 @@ export const authApi = {
     });
   },
 
-  async resetPassword(params: { email: string; new_password: string }): Promise<{ success: boolean; message: string }> {
+  async resetPassword(params: { email: string; new_password?: string; token?: string }): Promise<{ success: boolean; message: string }> {
     return apiClient<{ success: boolean; message: string }>('/auth/reset-password', {
       method: 'POST',
       body: JSON.stringify(params),

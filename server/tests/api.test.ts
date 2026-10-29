@@ -91,4 +91,44 @@ describe('PostureFit API Endpoints', () => {
     const res = await request(app).get('/api/progress/dashboard');
     expect(res.status).toBe(401);
   });
+
+  it('POST /api/auth/reset-password securely accepts email for reset instructions', async () => {
+    const res = await request(app)
+      .post('/api/auth/reset-password')
+      .send({ email: 'tester@posturefit.test' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.message).toContain('instructions have been sent');
+  });
+
+  it('POST /api/auth/reset-password rejects unauthenticated password change attempts without a token (Anti-Takeover)', async () => {
+    const res = await request(app)
+      .post('/api/auth/reset-password')
+      .send({
+        email: 'tester@posturefit.test',
+        new_password: 'malicious_overwrite_pass',
+      });
+
+    expect(res.status).toBe(403);
+    expect(res.body.success).toBe(false);
+    expect(res.body.error).toContain('recovery token');
+  });
+
+  it('rejects unauthenticated requests to admin management routes', async () => {
+    const res = await request(app)
+      .post('/api/admin/exercises')
+      .send({ title: 'Unauthorized Exercise' });
+
+    expect(res.status).toBe(401);
+  });
+
+  it('rejects admin access when x-admin-key is invalid or empty', async () => {
+    const res = await request(app)
+      .post('/api/admin/exercises')
+      .set('x-admin-key', 'bogus-key')
+      .send({ title: 'Unauthorized Exercise' });
+
+    expect(res.status).toBe(401);
+  });
 });
