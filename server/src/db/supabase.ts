@@ -1,5 +1,11 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import ws from 'ws';
 import { config } from '../config.js';
+
+// Ensure global WebSocket is always available in Node runtime
+if (typeof globalThis.WebSocket === 'undefined') {
+  (globalThis as any).WebSocket = ws;
+}
 
 let supabaseClient: SupabaseClient | null = null;
 
@@ -25,6 +31,9 @@ export const getSupabase = (): SupabaseClient | null => {
       auth: {
         autoRefreshToken: false,
         persistSession: false,
+      },
+      realtime: {
+        transport: ws as any,
       },
     });
   }
