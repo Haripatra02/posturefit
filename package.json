@@ -4,6 +4,9 @@
   "type": "module",
   "description": "PostureFit - A Gamified Web-Based Workplace Posture Awareness and Activity Platform",
   "private": true,
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "postinstall": "npm --prefix client install && npm --prefix server install",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
